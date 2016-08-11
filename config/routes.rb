@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+
+  get 'admin/index' => 'admin#index'
+  post 'admin/index' => 'admin#index'
+  get 'admin/users' => 'admin#users'
+  post 'admin/users' => 'admin#users'
+  get 'admin/analytics' => 'admin#analytics'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

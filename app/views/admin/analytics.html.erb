@@ -1,0 +1,135 @@
+<div id="wrapper">
+<div id="contents">
+<div class="toolbox">
+  <%= form_tag({:controller => 'admin', :action => 'users'}, remote: true, :class => "form_center") do%>
+    <select name="company_id">
+      <% @company_lists.each do |c| %>
+        <option value=<%= c.id %>>
+          <%= c.name%>
+        </option>
+      <% end %>
+    </select>
+    <input type="submit" value="送信">
+  <% end %>
+  
+  <table class="tbl_tools" border="1">
+  <tr>
+    <th colspan="4">基本情報</th>
+    <th colspan="5"><%= @this_week_custom %></th>
+    <th colspan="5"><%= @last_week_custom%></th>
+    <th colspan="5"><%= @second_last_week_custom %></th>
+    <th colspan="5"><%= @third_last_week_custom %></th>
+  </tr>
+
+  <tr>
+    <th>会社名</th>
+    <th>社員数</th>
+    <th>登録日</th>
+    <th>独自ギフト</th>
+    <% @weeks.each do |week|%>
+      <th>投稿数</th>
+      <th>いいね数</th>
+      <th>コメント数</th>
+      <th>アクション数</th>
+      <th>平均アクション数</th>
+    <% end %>
+  </tr>
+  <% @company_lists.each do | item | %>
+    <tr class="item_<%= item[:id] %> company_<%= item.id %> reborn">
+      <td><%= item.name %></td>
+      <td><%= User.where(company_id: item.id).count %></td>
+      <td><%= item[:create_time ].strftime("%Y-%m-%d") %></td>
+      <td><%= Reward.where(company_id: item.id).count %></td>
+      <% @weeks.each do |week| %>
+        <td>
+          <% @company_post = Post.where(create_time: week).group("company_id").count %>
+          <% if @company_post[item.id].blank? %>
+            <% @company_post[item.id] = 0 %>
+          <% end %>
+          <%= @company_post[item.id] %>
+        </td>
+        <td>
+          0
+         
+        </td>
+        <td>
+          <% @company_comment = Comment.where(create_time: week).group("company_id").count %>
+          <% if @company_comment[item.id].blank? %>
+            <% @company_comment[item.id] = 0 %>
+          <% end %>
+          <%= @company_comment[item.id] %>
+      </td>
+      <td style="background-color:#ffffe0">
+        <%= @company_post[item.id] + 0 + @company_comment[item.id]%>
+      </td>
+      <td>0</td>
+      <% end %>
+    </tr>
+  <% end %>
+  </table><br>
+
+  <table class="tbl_tools" border="1">
+  <tr>
+    <th colspan="4">基本情報</th>
+    <th colspan="4"><%= @this_week_custom %></th>
+    <th colspan="4"><%= @last_week_custom %></th>
+    <th colspan="4"><%= @second_last_week_custom %></th>
+    <th colspan="4"><%= @third_last_week_custom %></th>
+  </tr>
+
+  <tr>
+    <th>会社名</th>
+    <th>名前</th>
+    <th>登録日</th>
+    <th>ステータス</th>
+    <% @weeks.each do |week|%>
+      <th>投稿数</th>
+      <th>いいね数</th>
+      <th>コメント数</th>
+      <th>アクション数</th>
+    <% end %>
+  </tr>
+  <% @users.each do | item | %>
+    <tr class="item_<%= item[:id] %> company_<%= item.company.id %> reborn">
+      <td><%= item.company.name %></td>
+      <td><%= "#{item[:lastname]} #{item[:firstname]}" %></td>
+      <td><%= item[:create_time ].strftime("%Y-%m-%d") %></td>
+      <td align="center">
+        <% if item[:verified] == 0 %>保留 
+        <% else %>登録済 
+        <% end %>
+      </td>
+      <% @weeks.each do |week| %>
+        <td>
+          <% @post_times = Post.where(create_time: week).group("user_id").count %>
+          <% if @post_times[item.id].blank? %>
+            <% @post_times[item.id] = 0 %>
+          <% end %>
+          <%= @post_times[item.id] %>
+        </td>
+        <td>
+          <% @kudo_times = Kudos.where(create_time: week).group("user_id").count %>
+          <% if @kudo_times[item.id].blank? %>
+            <% @kudo_times[item.id] = 0 %>
+          <% end %>
+          <%= @kudo_times[item.id] %>
+        </td>
+        <td>
+          <% @comment_times = Comment.where(create_time: week).group("user_id").count %>
+          <% if @comment_times[item.id].blank? %>
+            <% @comment_times[item.id] = 0 %>
+          <% end %>
+          <%= @comment_times[item.id] %>
+      </td>
+      <td style="background-color:#ffffe0">
+        <%= @post_times[item.id] + @kudo_times[item.id] + @comment_times[item.id]%>
+      </td>
+      <% end %>
+    </tr>
+  <% end %>
+  </table><br>
+    <p align="center"><%= link_to "戻る", "/admin/index", :class => "btn btn_back", :style => "width:200px;height:50px" %></p>
+  <br>
+</div>
+</div> <!-- contents -->
+</div> <!-- wrapper -->
