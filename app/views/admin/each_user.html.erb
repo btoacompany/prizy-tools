@@ -12,64 +12,9 @@
     <input type="submit" value="送信">
   <% end %>
   
-  <table class="tbl_tools" border="1">
-  <tr>
-    <th colspan="4">基本情報</th>
-    <th colspan="5"><%= @this_week_custom %></th>
-    <th colspan="5"><%= @last_week_custom%></th>
-    <th colspan="5"><%= @second_last_week_custom %></th>
-    <th colspan="5"><%= @third_last_week_custom %></th>
-  </tr>
-
-  <tr>
-    <th>会社名</th>
-    <th>社員数</th>
-    <th>登録日</th>
-    <th>独自ギフト</th>
-    <% @weeks.each do |week|%>
-      <th>投稿数</th>
-      <th>いいね数</th>
-      <th>コメント数</th>
-      <th>アクション数</th>
-      <th>平均アクション数</th>
-    <% end %>
-  </tr>
-  <% @company_lists.each do | item | %>
-    <tr class="item_<%= item[:id] %> company_<%= item.id %> reborn">
-      <td><%= item.name %></td>
-      <td><%= User.where(company_id: item.id).count %></td>
-      <td><%= item[:create_time ].strftime("%Y-%m-%d") %></td>
-      <td><%= Reward.where(company_id: item.id).count %></td>
-      <% @weeks.each do |week| %>
-        <td>
-          <% @company_post = Post.where(create_time: week).group("company_id").count %>
-          <% if @company_post[item.id].blank? %>
-            <% @company_post[item.id] = 0 %>
-          <% end %>
-          <%= @company_post[item.id] %>
-        </td>
-        <td>
-          0
-         
-        </td>
-        <td>
-          <% @company_comment = Comment.where(create_time: week).group("company_id").count %>
-          <% if @company_comment[item.id].blank? %>
-            <% @company_comment[item.id] = 0 %>
-          <% end %>
-          <%= @company_comment[item.id] %>
-      </td>
-      <td style="background-color:#ffffe0">
-        <%= @company_post[item.id] + 0 + @company_comment[item.id]%>
-      </td>
-      <td>0</td>
-      <% end %>
-    </tr>
-  <% end %>
-  </table><br>
-
-  <table class="tbl_tools" border="1">
-  <tr>
+  <!-- each user summary -->
+  <table class="tbl_tools third_table" border="1">
+  <tr class="first_line">
     <th colspan="4">基本情報</th>
     <th colspan="4"><%= @this_week_custom %></th>
     <th colspan="4"><%= @last_week_custom %></th>
@@ -77,7 +22,7 @@
     <th colspan="4"><%= @third_last_week_custom %></th>
   </tr>
 
-  <tr>
+  <tr class="second_line">
     <th>会社名</th>
     <th>名前</th>
     <th>登録日</th>
@@ -88,7 +33,7 @@
       <th>コメント数</th>
       <th>アクション数</th>
     <% end %>
-  </tr>
+  </tr class="third_line">
   <% @users.each do | item | %>
     <tr class="item_<%= item[:id] %> company_<%= item.company.id %> reborn">
       <td><%= item.company.name %></td>

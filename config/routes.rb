@@ -4,8 +4,13 @@ Rails.application.routes.draw do
   post 'admin/index' => 'admin#index'
   get 'admin/users' => 'admin#users'
   post 'admin/users' => 'admin#users'
-  get 'admin/analytics' => 'admin#analytics'
-
+  get 'admin/analytics/overall' => 'admin#overall'
+  get 'admin/analytics/company' => 'admin#company'
+  post 'admin/analytics/company' => 'admin#company'
+  get 'admin/analytics/user' => 'admin#each_user'
+  post 'admin/analytics/user' => 'admin#each_user'
+  post 'export_first_csv' => 'admin#first_csv'
+  post 'export_second_csv' => 'admin#second_csv'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

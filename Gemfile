@@ -32,6 +32,7 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'puma'
 gem 'dotenv-rails'
 gem 'figaro'
+gem 'nokogiri'
 group :development do
   gem 'capistrano'
   gem 'capistrano3-puma'
