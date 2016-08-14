@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   post 'admin/analytics/user' => 'admin#each_user'
   post 'export_first_csv' => 'admin#first_csv'
   post 'export_second_csv' => 'admin#second_csv'
+  post 'export_third_csv' => 'admin#third_csv'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

@@ -2,15 +2,14 @@ require 'csv'
 
 class AdminController < ApplicationController
 
-  before_action :time_definition, only:[:overall, :company, :each_user, :first_csv, :second_csv, :csv_header]
+  before_action :time_definition, only:[:overall, :company, :each_user, :first_csv, :second_csv, :third_csv, :csv_header]
   before_action :company_lists, only:[:index, :users, :company, :each_user, :second_csv]
-  before_action :user, only:[:users, :each_user]
+  before_action :user, only:[:users, :each_user, :third_csv]
   #allcsv_header
-  before_action :csv_header, only:[:first_csv, :second_csv]
+  before_action :csv_header, only:[:first_csv, :second_csv, :third_csv]
   #first_csv
   before_action :overall, only:[:first_csv]
   #second_csv
-  before_action :company, only:[:second_csv]
 
   def index
     @company_posts = {}
@@ -87,10 +86,11 @@ class AdminController < ApplicationController
 
   def second_csv
     contents = []
+    @company_kudos = 0
     @company_lists.each do |item|
       hash = []
-      hash << item.name
-      @employees = User.where(conpany_id: item.id)
+      hash << item.name + "."
+      @employees = User.where(company_id: item.id)
       hash << @employees.count
       hash << item[:create_time].strftime("%Y-%m-%d")
       hash << Reward.where(company_id: item.id).count
@@ -113,14 +113,14 @@ class AdminController < ApplicationController
           @c[item.id] = 0
         end
         # @d
-        @d = @a + @company_kudos + @c
+        @d = @a[item.id] + @company_kudos + @c[item.id]
         # @e
         if @employees.count > 0
           @e = @d / @employees.count
         else
           @e = 0
         end
-        hash << @a << @b << @c << @d << @e
+        hash << @a[item.id] << @company_kudos << @c[item.id] << @d << @e
       end
       contents << hash
     end
@@ -134,6 +134,57 @@ class AdminController < ApplicationController
     end
     send_data(data, type: 'text/csv', filename: "report_#{Time.now.strftime('%Y%m%d%H%M%S')}.csv")
   end
+
+  def third_csv
+    contents = []
+    @users.each do |item|
+      hash = []
+      hash << item.company.name + "."
+      hash << item.name
+      hash << item.create_time
+      if item[:verified] == 0
+        hash << "Registered"
+      else
+        hash << "not_yet"
+      end
+      @weeks.each do |week|
+        @a = Post.where(create_time: week).group("user_id").count
+        if @a[item.id].blank?
+          @a[item.id] = 0
+          hash << 0
+        else
+          hash << @a[item.id]
+        end
+        @b = Kudos.where(create_time: week).group("user_id").count
+        if @b[item.id].blank?
+          @b[item.id] = 0
+          hash << 0
+        else
+           hash << @b[item.id]
+        end
+        @c = Comment.where(create_time: week).group("user_id").count
+        if @c[item.id].blank?
+          @c[item.id] = 0
+          hash << 0
+        else
+          hash << @c[item.id]
+        end
+        hash << @a[item.id] + @b[item.id] + @c[item.id]
+      end
+      contents << hash
+    end
+
+    data = CSV.generate do |csv|
+      csv << @first_header_user 
+      csv << @third_header_company
+      contents.each do |value|
+        csv << value
+      end
+    end
+    send_data(data, type: 'text/csv', filename: "report_#{Time.now.strftime('%Y%m%d%H%M%S')}.csv")
+  end
+
+
 
   def time_definition
     @weeks=[]
@@ -168,9 +219,12 @@ class AdminController < ApplicationController
 
   def csv_header
     @first_header_overall = ["Info", "Info", "Info", "Info", "Info", @this_week_custom, @this_week_custom, @this_week_custom, @this_week_custom, @this_week_custom, @last_week_custom, @last_week_custom, @last_week_custom, @last_week_custom, @last_week_custom, @second_last_week_custom ,@second_last_week_custom ,@second_last_week_custom ,@second_last_week_custom ,@second_last_week_custom ,@third_last_week_custom, @third_last_week_custom, @third_last_week_custom, @third_last_week_custom, @third_last_week_custom  ]
-    @first_header_others = ["Info", "Info", "Info", "Info", @this_week_custom, @this_week_custom, @this_week_custom, @this_week_custom, @this_week_custom, @last_week_custom, @last_week_custom, @last_week_custom, @last_week_custom, @last_week_custom, @second_last_week_custom ,@second_last_week_custom ,@second_last_week_custom ,@second_last_week_custom ,@second_last_week_custom ,@third_last_week_custom, @third_last_week_custom, @third_last_week_custom, @third_last_week_custom, @third_last_week_custom  ]
+    @first_header_others = ["Info", "Info", "Info", "Info", @this_week_custom, @this_week_custom, @this_week_custom, @this_week_custom, @this_week_custom, @last_week_custom, @last_week_custom, @last_week_custom, @last_week_custom, @last_week_custom, @second_last_week_custom ,@second_last_week_custom ,@second_last_week_custom ,@second_last_week_custom ,@second_last_week_custom ,@third_last_week_custom, @third_last_week_custom, @third_last_week_custom, @third_last_week_custom, @third_last_week_custom]
+    @first_header_user = ["Info", "Info", "Info","Info", @this_week_custom, @this_week_custom, @this_week_custom, @this_week_custom, @last_week_custom, @last_week_custom, @last_week_custom, @last_week_custom, @second_last_week_custom ,@second_last_week_custom ,@second_last_week_custom ,@second_last_week_custom ,@third_last_week_custom, @third_last_week_custom, @third_last_week_custom, @third_last_week_custom]
     @second_header_overall = ["Companies", "Users", "Posts", "Actions", "Points", "New-Companies", "New-users", "New-posts", "New-actions", "New-points", "New-Companies", "New-users", "New-posts", "New-actions", "New-points","New-Companies", "New-users", "New-posts", "New-actions", "New-points", "New-Companies", "New-users", "New-posts", "New-actions", "New-points"]
     @second_header_company = ["Companies", "Users", "Register_date", "Gifts", "Posts", "Goods", "Comments", "Actions", "Acctions.ave", "Posts", "Goods", "Comments", "Actions", "Acctions.ave", "Posts", "Goods", "Comments", "Actions", "Acctions.ave", "Posts", "Goods", "Comments", "Actions", "Acctions.ave",]
+    @third_header_company = [
+      "Companies", "Users", "Register_date", "Status", "Posts", "Goods", "Comments", "Actions", "Posts", "Goods", "Comments", "Actions", "Posts", "Goods", "Comments", "Actions", "Posts", "Goods", "Comments", "Actions"]
   end
 
 end
