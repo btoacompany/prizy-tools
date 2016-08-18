@@ -184,6 +184,10 @@ class AdminController < ApplicationController
     send_data(data, type: 'text/csv', filename: "report_#{Time.now.strftime('%Y%m%d%H%M%S')}.csv")
   end
 
+  def reward
+    @request_rewards = RequestReward.all
+  end
+
 
 
   def time_definition
