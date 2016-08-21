@@ -6,10 +6,10 @@
   <table class="tbl_tools first_table" border="1">
   <tr class="first_line">
     <th colspan="5">基本情報</th>
-    <th colspan="5"><%= @this_week_custom %></th>
-    <th colspan="5"><%= @last_week_custom %></th>
-    <th colspan="5"><%= @second_last_week_custom %></th>
     <th colspan="5"><%= @third_last_week_custom %></th>
+    <th colspan="5"><%= @second_last_week_custom %></th>
+    <th colspan="5"><%= @last_week_custom %></th>
+    <th colspan="5"><%= @this_week_custom %></th>
   </tr>
 
   <tr class="second_line">
@@ -48,6 +48,96 @@
   </table><br>
 
   <%= button_to 'CSV出力', export_first_csv_path %>
+
+
+<div id="new_companies" class="analytics_float" style="height: 300px; width: 50%;"> </div>
+<div id="new_users" class="analytics_float" style="height: 300px; width: 50%;"> </div>
+<div id="new_posts" class="analytics_float" style="height: 300px; width: 50%;"> </div>
+<div id="new_points" class="analytics_float" style="height: 300px; width: 50%;"> </div>
+
+
+<script type="text/javascript">
+window.onload = function () {
+  var chart = new CanvasJS.Chart("new_companies", {
+    title:{
+      text: "新規会社数"              
+    },
+    data: [              
+    {
+      // Change type to "doughnut", "line", "splineArea", etc.
+      type: "column",
+      dataPoints: [
+      { label: "累計",  y: <%= @company_lists %>  },
+      <% @week_custom.each do |week, custom| %>
+        { label: "<%= custom %>",  y: <%= Company.where(create_time: week).count %>  },
+      <% end %>
+      ]
+    }
+    ]
+  });
+  chart.render();
+
+  var chart = new CanvasJS.Chart("new_users", {
+    title:{
+      text: "新規ユーザー数"              
+    },
+    data: [              
+    {
+      // Change type to "doughnut", "line", "splineArea", etc.
+      type: "column",
+      dataPoints: [
+      { label: "累計",  y: <%= @users %>  },
+      <% @week_custom.each do |week, custom| %>
+        { label: "<%= custom %>",  y: <%= User.where(create_time: week).count %>  },
+      <% end %>
+      ]
+    }
+    ]
+  });
+  chart.render();
+
+  var chart = new CanvasJS.Chart("new_posts", {
+    title:{
+      text: "投稿数"              
+    },
+    data: [              
+    {
+      // Change type to "doughnut", "line", "splineArea", etc.
+      type: "column",
+      dataPoints: [
+      { label: "累計",  y: <%= @total_posts %>  },
+      <% @week_custom.each do |week, custom| %>
+        { label: "<%= custom %>",  y: <%= Post.where(create_time: week).count %>  },
+      <% end %>
+      ]
+    }
+    ]
+  });
+  chart.render();
+
+  var chart = new CanvasJS.Chart("new_points", {
+    title:{
+      text: "ポイント数"              
+    },
+    data: [              
+    {
+      // Change type to "doughnut", "line", "splineArea", etc.
+      type: "column",
+      dataPoints: [
+      { label: "累計",  y: <%= @total_points %>  },
+      <% @week_custom.each do |week, custom| %>
+        { label: "<%= custom %>",  y: <%= Post.where(create_time: week).sum(:points) %>  },
+      <% end %>
+      ]
+    }
+    ]
+  });
+  chart.render();
+
+}
+</script>
+
+
 
 </div>
 </div> <!-- contents -->

@@ -1099,3 +1099,7 @@ hr.style-two {
 .form_center{
   text-align: center;
 }
+
+.analytics_float{
+  float: left;
+}

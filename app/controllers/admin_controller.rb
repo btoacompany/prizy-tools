@@ -210,7 +210,16 @@ class AdminController < ApplicationController
     @third_last_week = @big_third_last_week..@end_third_last_week
     @third_last_week_custom = @big_third_last_week.strftime("%m/%d")..@end_third_last_week.strftime("%m/%d")
     
-    @weeks << @this_week << @last_week << @second_last_week << @third_last_week
+    @weeks << @third_last_week << @second_last_week << @last_week << @this_week
+
+    @week_custom = {
+      @third_last_week => @third_last_week_custom,
+      @second_last_week => @second_last_week_custom,
+      @last_week => @last_week_custom,
+      @this_week => @this_week_custom
+    }
+
+
   end
 
   def user
