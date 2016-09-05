@@ -1,0 +1,168 @@
+<div id="wrapper">
+<div id="contents">
+<div class="toolbox">
+  <%= form_tag({:controller => 'admin', :action => 'users'}, remote: true, :class => "form_center") do%>
+    <select name="company_id">
+      <% @company_lists.each do |c| %>
+        <option value=<%= c.id %>>
+          <%= c.name%>
+        </option>
+      <% end %>
+    </select>
+    <input type="submit" value="送信">
+  <% end %>
+
+  <!-- each company summary -->
+  <table class="tbl_tools second_table" border="1">
+  <tr class="first_line">
+    <th colspan="4">基本情報</th>
+    <th colspan="5"><%= @third_last_week_custom %></th>
+    <th colspan="5"><%= @second_last_week_custom %></th>
+    <th colspan="5"><%= @last_week_custom %></th>
+    <th colspan="5"><%= @this_week_custom %></th>
+  </tr>
+
+  <tr class="second_line">
+    <th>会社名</th>
+    <th>社員数</th>
+    <th>登録日</th>
+    <th>独自ギフト</th>
+    <% @weeks.each do |week|%>
+      <th>投稿数</th>
+      <th>いいね数</th>
+      <th>コメント数</th>
+      <th>アクション数</th>
+      <th>平均アクション数</th>
+    <% end %>
+  </tr class="third_line">
+  <% @company_lists.each do | item | %>
+    <tr class="item_<%= item[:id] %> company_<%= item.id %> reborn">
+      <td><%= item.name %></td>
+      <% @num_employees =  User.where(company_id: item.id).count %>
+      <td><%= @num_employees %></td>
+      <td><%= item[:create_time ].strftime("%Y-%m-%d") %></td>
+      <td><%= Reward.where(company_id: item.id).count %></td>
+      <% @weeks.each do |week| %>
+        <td>
+          <% @company_post = Post.where(create_time: week).group("company_id").count %>
+          <% if @company_post[item.id].blank? %>
+            <% @company_post[item.id] = 0 %>
+          <% end %>
+          <%= @company_post[item.id] %>
+        </td>
+        <td>
+          <% @company_users = User.where(company_id: item.id) %>
+          <% @compay_kudo = Kudos.where(create_time: week).group("user_id").count %>
+          <% @company_users.each do |user| %>
+            <% if @compay_kudo[user.id].blank? %>
+              <% @compay_kudo[user.id] = 0 %>
+            <% end %>
+            <% @company_kudos =+ @compay_kudo[user.id] %>
+          <% end %>
+          <%= @company_kudos %>
+        </td>
+        <td>
+          <% @company_comment = Comment.where(create_time: week).group("company_id").count %>
+          <% if @company_comment[item.id].blank? %>
+            <% @company_comment[item.id] = 0 %>
+          <% end %>
+          <%= @company_comment[item.id] %>
+      </td>
+      <td style="background-color:#ffffe0">
+        <% @sum_action = @company_post[item.id] + @company_kudos + @company_comment[item.id]%>
+        <%= @sum_action %>
+      </td>
+      <td>
+        <% if @num_employees > 0 %>
+          <%= @sum_action / @num_employees %>
+        <% else %>
+          0
+        <% end %>
+      </td>
+      <% end %>
+    </tr>
+  <% end %>
+  </table><br>
+  <%= button_to 'CSV出力', export_second_csv_path %>
+
+<div id="company_employee" class="analytics_float" style="height: 300px; width: 100%;"> </div>
+
+<% @company_lists.order("id desc").each do |company| %>
+  <div id="<%= company.name %>" class="analytics_float" style="height: 300px; width: 50%;"></div>
+<% end %>
+
+<script type="text/javascript">
+
+window.onload = function () {
+  var chart = new CanvasJS.Chart("company_employee", {
+    title:{
+      text: "社員数"              
+    },
+    data: [              
+    {
+      type: "bar",
+      dataPoints: [
+      <% @company_lists.order("id desc").each do |company| %>
+        { label: "<%= company.name %>",  y: <%= User.where(company_id: company.id).count %> },
+      <% end %>
+      ]
+    }
+    ]
+  });
+  chart.render();
+
+  <% @company_lists.order("id desc").each do |item| %>
+  var chart = new CanvasJS.Chart("<%= item.name %>", {
+    title:{
+      text: "<%= item.name %>"              
+    },
+    data: [
+    <% @week_custom.each do |week, value| %>
+    {
+      type: "bar",
+      legendText: "<%= value %>",
+      showInLegend: true,
+      dataPoints: [
+        <% @company_comment = Comment.where(create_time: week).group("company_id").count %>
+          <% if @company_comment[item.id].blank? %>
+            <% @company_comment[item.id] = 0 %>
+          <% end %>
+
+        <% @company_users = User.where(company_id: item.id) %>
+          <% @compay_kudo = Kudos.where(create_time: week).group("user_id").count %>
+          <% @company_users.each do |user| %>
+            <% if @compay_kudo[user.id].blank? %>
+              <% @compay_kudo[user.id] = 0 %>
+            <% end %>
+            <% @company_kudos =+ @compay_kudo[user.id] %>
+          <% end %>
+
+        <% @company_post = Post.where(create_time: week).group("company_id").count %>
+        <% if @company_post[item.id].blank? %>
+          <% @company_post[item.id] = 0 %>
+        <% end %>
+        <% @sum_action = @company_post[item.id] + @company_kudos + @company_comment[item.id]%>
+
+        { label: "アクション数",  y: <%= @sum_action %> },
+        { label: "コメント数",  y: <%= @company_comment[item.id] %> },
+        { label: "いいね数",  y: <%= @company_kudos %> },
+        { label: "投稿数",  y: <%= @company_post[item.id] %> },
+
+
+
+
+      ]
+    },
+    <% end %>
+    ]
+  });
+  chart.render();
+  <% end %>
+
+}
+</script>
+
+
+</div>
+</div> <!-- contents -->
+</div> <!-- wrapper -->

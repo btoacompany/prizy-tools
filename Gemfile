@@ -7,7 +7,7 @@ gem 'mysql2', '~> 0.3.20'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
+gem 'uglifier'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.1.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
@@ -29,9 +29,10 @@ gem 'bcrypt', '~> 3.1.7'
 # Use Unicorn as the app server
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
+gem 'puma'
 gem 'dotenv-rails'
 gem 'figaro'
-gem 'puma'
+gem 'nokogiri'
 group :development do
   gem 'capistrano'
   gem 'capistrano3-puma'
