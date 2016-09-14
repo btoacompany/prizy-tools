@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
 
-  get 'admin/index' => 'admin#index'
-  post 'admin/index' => 'admin#index'
+  get 'admin/test/:id' => 'admin#test'
   get 'admin/users' => 'admin#users'
   post 'admin/users' => 'admin#users'
   get 'admin/analytics/overall' => 'admin#overall'

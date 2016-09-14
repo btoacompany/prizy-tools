@@ -11,6 +11,33 @@ class AdminController < ApplicationController
   before_action :overall, only:[:first_csv]
   #second_csv
 
+  def test
+    @company = Company.find(params[:id])
+    posts = Post.where(:company_id => @company.id, :delete_flag => 0).order("update_time desc")
+
+    @posts = []
+    data = {}
+
+    posts.each do |post|
+      comments = Comment.where(:post_id => post.id, :delete_flag => 0)
+      kudos = Kudos.where(:post_id => post.id, :delete_flag => 0)
+
+      data ={
+        id: post.id,
+        user_id: post.user_id,
+        user_name: post.user.name,
+        receiver_name: post.receiver.id,
+        user_img: post.user.img_src,
+        receiver_img: post.receiver.img_src,
+        points: post.points,
+        description: post.description,
+        comments: comments,
+        kudos: kudos,
+        }
+      @posts << data
+    end
+  end
+
   def index
     @company_posts = {}
     @company_lists.each do |company|
