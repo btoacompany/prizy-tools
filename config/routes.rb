@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
-
-  get 'admin/test/:id' => 'admin#test'
+  root :to => 'admin#company'
   get 'admin/users' => 'admin#users'
   post 'admin/users' => 'admin#users'
   get 'admin/analytics/overall' => 'admin#overall'
@@ -13,6 +12,7 @@ Rails.application.routes.draw do
   post 'export_third_csv' => 'admin#third_csv'
   get 'admin/reward' => 'admin#reward'
   post 'admin/reward' => 'admin#reward'
+  get 'admin/:id' => 'admin#index'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
