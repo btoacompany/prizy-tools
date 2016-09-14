@@ -13,4 +13,5 @@ Rails.application.routes.draw do
   post 'export_third_csv' => 'admin#third_csv'
   get 'admin/reward' => 'admin#reward'
   post 'admin/reward' => 'admin#reward'
+  get 'admin/:id' => 'admin#index'
 end
