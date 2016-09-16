@@ -7,9 +7,20 @@
   <%= csrf_meta_tags %>
   <script src="/assets/javascripts/canvasjs-1.8.5/canvasjs.min.js"></script>
   <script src="/assets/javascripts/canvasjs-1.8.5/jquery.canvasjs.min.js"></script>
+  <script src="/assets/javascripts/intro.js"></script>
+  <link rel="stylesheet" type="text/css" href="/assets/stylesheets/introjs.css">
 </head>
 <body>
 
+<header>
+  <div class="header">
+    <li><%= link_to "ユーザー一覧", "/admin/users"%></li>
+    <li><%= link_to "利用状況(概観)", "/admin/analytics/overall"%></li>
+    <li><%= link_to "利用状況(企業)", "/admin/analytics/company"%></li>
+    <li><%= link_to "利用状況(個人)", "/admin/analytics/user"%></li>
+    <div class="clearfix"></div>
+  </div> 
+</header>
 <%= yield %>
 
 </body>

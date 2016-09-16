@@ -1,21 +1,28 @@
 <div id="wrapper">
 <div id="contents" class="timeline">
 <div class="leftbox col-8">
-  <%= form_tag({:controller => 'admin', :action => 'index'}, remote: true) do%>
-    <select name="company_id">
-      <% @company_lists.each do |c| %>
-        <option value=<%= c.id %>>
-          <%= c.name%>
-        </option>
-      <% end %>
-    </select>
-    <input type="submit" value="送信">
+
+<h2><%= @company.name %>の利用状況</h2>
+<div class="pagination" style="float:right">
+  <% if @total_pages > 8 %>
+    <% unless @page_now == 1 %>
+      <a href="<%= "/admin/#{@company.id}/?page=1" %>">最初</a>
+      <a href="<%= "/admin/#{@company.id}/?page=#{@previous_page}" %>">前へ</a>
+    <% end %>
+    <a href="<%= "/admin/#{@company.id}/?page=#{@page_now}" %>"><%= @page_now %></a>
+    <% unless @page_now == @total_pages %>
+      <a href="<%= "/admin/#{@company.id}/?page=#{@next_page}" %>">次へ</a>
+      <a href="<%= "/admin/#{@company.id}/?page=#{@total_pages}" %>">最後</a>
+    <% end %>
+  <% else %>
+    <% (1..@total_pages).each do | i | %>
+      <a href="<%= "/admin/#{@company.id}/?page=#{i}" %>"><%= i %></a>
+    <% end %>
   <% end %>
+</div><br>
+<div class="clearfix"></div>
 
-
-<% @company_posts.each do |num, posts| %>
-<div class="timeline delete" id=<%= num %>>
-<% posts.each do | post | %>
+<% @posts.each do | post | %>
   <div id="postsbox">
     <div class="images">
       <table>
@@ -75,8 +82,6 @@
       <input type="button" class="btn_comment" data-id="<%= post[:id] %>" value="送信"/>
     </div>
   </div><br>
-<% end %>
-</div>
 <% end %>
 </div>
 </div> <!-- contents -->

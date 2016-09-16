@@ -1,8 +1,6 @@
 Rails.application.routes.draw do
-  root 'admin#index'
+  root :to => 'admin#company'
 
-  get 'admin/index' => 'admin#index'
-  post 'admin/index' => 'admin#index'
   get 'admin/users' => 'admin#users'
   post 'admin/users' => 'admin#users'
   get 'admin/analytics/overall' => 'admin#overall'
@@ -15,4 +13,5 @@ Rails.application.routes.draw do
   post 'export_third_csv' => 'admin#third_csv'
   get 'admin/reward' => 'admin#reward'
   post 'admin/reward' => 'admin#reward'
+  get 'admin/:id' => 'admin#index'
 end
