@@ -1,0 +1,144 @@
+<div id="wrapper">
+<div id="contents">
+<div class="toolbox">
+
+  <!-- summary -->
+  <table class="tbl_tools first_table" border="1">
+  <tr class="first_line">
+    <th colspan="5">基本情報</th>
+    <th colspan="5"><%= @third_last_week_custom %></th>
+    <th colspan="5"><%= @second_last_week_custom %></th>
+    <th colspan="5"><%= @last_week_custom %></th>
+    <th colspan="5"><%= @this_week_custom %></th>
+  </tr>
+
+  <tr class="second_line">
+    <th>会社数</th>
+    <th>ユーザー数</th>
+    <th>累計投稿回数</th>
+    <th>累計アクション</th>
+    <th >累計ポイント</th>
+    <% @weeks.each do |week|%>
+      <th>新規会社数</th>
+      <th>新規ユーザー数</th>
+      <th>投稿回数</th>
+      <th>アクション数</th>
+      <th>ポイント合計</th>
+    <% end %>
+  </tr>
+  <tr class="item third_line">
+    <td><%= @company_lists %></td>
+    <td><%= @users %></td>
+    <td><%= @total_posts %></td>
+    <td><%= @total_actions %></td>
+    <td style="background-color:#ffffe0"><%= @total_points %></td>
+    <% @weeks.each do |week| %>
+      <td><%= Company.where(create_time: week).count %></td>
+      <td><%= User.where(create_time: week).count %></td>
+      <% @weekly_posts = Post.where(create_time: week).count %>
+      <% @weekly_comments = Comment.where(create_time: week).count %>
+      <% @weekly_kudos = Kudos.where(create_time: week).count %>
+      <td><%= @weekly_posts %></td>
+      <td>
+        <%= @weekly_posts + @weekly_comments + @weekly_kudos %>
+      </td>
+      <td style="background-color:#ffffe0"><%=  Post.where(create_time: week).sum(:points)%></td>
+      <% end %>
+    </tr>
+  </table><br>
+
+  <%= button_to 'CSV出力', export_first_csv_path %>
+
+
+<div id="new_companies" class="analytics_float" style="height: 300px; width: 50%;"> </div>
+<div id="new_users" class="analytics_float" style="height: 300px; width: 50%;"> </div>
+<div id="new_posts" class="analytics_float" style="height: 300px; width: 50%;"> </div>
+<div id="new_points" class="analytics_float" style="height: 300px; width: 50%;"> </div>
+
+
+<script type="text/javascript">
+window.onload = function () {
+  var chart = new CanvasJS.Chart("new_companies", {
+    title:{
+      text: "新規会社数"              
+    },
+    data: [              
+    {
+      // Change type to "doughnut", "line", "splineArea", etc.
+      type: "column",
+      dataPoints: [
+      { label: "累計",  y: <%= @company_lists %>  },
+      <% @week_custom.each do |week, custom| %>
+        { label: "<%= custom %>",  y: <%= Company.where(create_time: week).count %>  },
+      <% end %>
+      ]
+    }
+    ]
+  });
+  chart.render();
+
+  var chart = new CanvasJS.Chart("new_users", {
+    title:{
+      text: "新規ユーザー数"              
+    },
+    data: [              
+    {
+      // Change type to "doughnut", "line", "splineArea", etc.
+      type: "column",
+      dataPoints: [
+      { label: "累計",  y: <%= @users %>  },
+      <% @week_custom.each do |week, custom| %>
+        { label: "<%= custom %>",  y: <%= User.where(create_time: week).count %>  },
+      <% end %>
+      ]
+    }
+    ]
+  });
+  chart.render();
+
+  var chart = new CanvasJS.Chart("new_posts", {
+    title:{
+      text: "投稿数"              
+    },
+    data: [              
+    {
+      // Change type to "doughnut", "line", "splineArea", etc.
+      type: "column",
+      dataPoints: [
+      { label: "累計",  y: <%= @total_posts %>  },
+      <% @week_custom.each do |week, custom| %>
+        { label: "<%= custom %>",  y: <%= Post.where(create_time: week).count %>  },
+      <% end %>
+      ]
+    }
+    ]
+  });
+  chart.render();
+
+  var chart = new CanvasJS.Chart("new_points", {
+    title:{
+      text: "ポイント数"              
+    },
+    data: [              
+    {
+      // Change type to "doughnut", "line", "splineArea", etc.
+      type: "column",
+      dataPoints: [
+      { label: "累計",  y: <%= @total_points %>  },
+      <% @week_custom.each do |week, custom| %>
+        { label: "<%= custom %>",  y: <%= Post.where(create_time: week).sum(:points) %>  },
+      <% end %>
+      ]
+    }
+    ]
+  });
+  chart.render();
+
+}
+</script>
+
+
+
+</div>
+</div> <!-- contents -->
+</div> <!-- wrapper -->
