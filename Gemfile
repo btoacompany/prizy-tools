@@ -29,16 +29,18 @@ gem 'bcrypt', '~> 3.1.7'
 # Use Unicorn as the app server
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
-gem 'puma'
+gem 'unicorn'
+#gem 'puma'
 gem 'dotenv-rails'
 gem 'figaro'
 gem 'nokogiri'
 group :development do
   gem 'capistrano'
-  gem 'capistrano3-puma'
+  gem 'capistrano3-unicorn'
   gem 'capistrano-rails', require: false
   gem 'capistrano-bundler', require: false
-  gem 'capistrano-rvm'
+  #gem 'capistrano-rvm'
+  gem 'capistrano-rbenv'
 end
 
 group :development, :test do
