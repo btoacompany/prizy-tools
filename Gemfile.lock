@@ -66,8 +66,9 @@ GEM
     capistrano-rvm (0.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
-    capistrano3-unicorn (0.2.1)
-      capistrano (~> 3.1, >= 3.1.0)
+    capistrano3-puma (1.2.1)
+      capistrano (~> 3.0)
+      puma (>= 2.6)
     coffee-rails (4.1.1)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.1.x)
@@ -100,7 +101,6 @@ GEM
       railties (>= 3.1.0)
       turbolinks
     json (1.8.3)
-    kgio (2.10.0)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.4)
@@ -117,6 +117,7 @@ GEM
     net-ssh (3.2.0)
     nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
+    puma (3.6.0)
     rack (1.6.4)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -144,7 +145,6 @@ GEM
       activesupport (= 4.2.4)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    raindrops (0.17.0)
     rake (11.3.0)
     rdoc (4.2.2)
       json (~> 1.4)
@@ -182,9 +182,6 @@ GEM
       thread_safe (~> 0.1)
     uglifier (3.0.2)
       execjs (>= 0.3.0, < 3)
-    unicorn (5.1.0)
-      kgio (~> 2.6)
-      raindrops (~> 0.7)
     web-console (2.3.0)
       activemodel (>= 4.0)
       binding_of_caller (>= 0.7.2)
@@ -202,7 +199,7 @@ DEPENDENCIES
   capistrano-bundler
   capistrano-rails
   capistrano-rvm
-  capistrano3-unicorn
+  capistrano3-puma
   coffee-rails (~> 4.1.0)
   dotenv-rails
   figaro
@@ -211,13 +208,13 @@ DEPENDENCIES
   jquery-turbolinks
   mysql2 (~> 0.3.20)
   nokogiri
+  puma
   rails (= 4.2.4)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   spring
   sucker_punch
   uglifier
-  unicorn
   web-console (~> 2.0)
 
 BUNDLED WITH
