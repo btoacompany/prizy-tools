@@ -4,7 +4,6 @@ require 'bcrypt'
 class User < ActiveRecord::Base
   include BCrypt
 
-  serialize :accounts
   self.table_name = "users"
 
   belongs_to :company
@@ -13,29 +12,25 @@ class User < ActiveRecord::Base
   has_many :kudos
   has_many :hashtags
 
-  before_save 	:encrypt_password
-  after_save 	:clear_password
+=begin
   before_create :set_create_time
   before_update :set_update_time
   
   def save_record(params)
-    @password = params[:password]
-    
-    if params[:img_src].present?
-      self.img_src	= params[:img_src]
-    end
-    
     self.name	      = params[:name]	      if params[:name].present?
     self.email	      = params[:email]	      if params[:email].present?
     self.company_id   = params[:company_id]   if params[:company_id].present?
-    self.firstname    = params[:firstname]
-    self.lastname     = params[:lastname]
-    self.birthday     = params[:birthday]
-    self.job_title    = params[:job_title]
-    self.gender	      = params[:gender]	 || 0
+    self.firstname    = params[:firstname]    if params[:firstname].present?
+    self.img_src      = params[:img_src]      if params[:img_src].present?
+    self.lastname     = params[:lastname]     if params[:lastname].present?
+    self.birthday     = params[:birthday]     if params[:birthday].present?
+    self.job_title    = params[:job_title]    if params[:job_title].present?
+    self.gender	      = params[:gender]	      if params[:gender].present?
     self.in_points    = params[:in_points]    if params[:in_points].present?
     self.out_points   = params[:out_points]   if params[:out_points].present?
     self.verified     = params[:verified]     if params[:verified].present?
+    self.admin	      = params[:admin]	      if params[:admin].present?
+    self.deliver_invite_mail = params[:deliver_invite_mail]  if params[:deliver_invite_mail].present?
     self.save
   end
   
@@ -58,30 +53,5 @@ class User < ActiveRecord::Base
   def set_time
     return Time.now.strftime("%Y-%m-%d %H:%M:%S")
   end
-
-  def encrypt_password
-    if @password.present?
-      self.salt = BCrypt::Engine.generate_salt
-      self.password = BCrypt::Engine.hash_secret(@password, salt)
-    end
-  end
-
-  def clear_password
-    @password = nil
-  end
-
-  def match_password(login_password="")
-    password == BCrypt::Engine.hash_secret(login_password, salt)
-  end
-
-private
-  def self.authenticate(email="", login_password="")
-    user = User.find_by_email(email)
-
-    if user && user.match_password(login_password)
-      return user 
-    else
-      return false
-    end
-  end   
+=end  
 end
