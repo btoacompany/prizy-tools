@@ -1,6 +1,6 @@
 require 'csv'
 
-class AdminController < ApplicationController
+class AnalyticsController < ApplicationController
 
   before_action :time_definition, only:[:overall, :company, :each_user, :first_csv, :second_csv, :third_csv, :csv_header]
   before_action :company_lists, only:[:index, :users, :company, :each_user, :second_csv]

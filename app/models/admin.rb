@@ -16,8 +16,6 @@ class Admin < ActiveRecord::Base
     
     self.name	      = params[:name]
     self.email	      = params[:email]
-    self.firstname    = params[:firstname]
-    self.lastname     = params[:lastname]
     self.save
   end
   
