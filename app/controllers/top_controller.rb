@@ -6,7 +6,7 @@ class TopController < ApplicationController
 
   def login
     if session[:id] || cookies[:id]
-      redirect_to "/admin"
+      redirect_to "/"
     end
     reset_session
   end
@@ -20,7 +20,6 @@ class TopController < ApplicationController
 	reset_session
 	flash[:notice] = "ユーザー名かパスワードに誤りがあります"
 	render 'login', :status => :unauthorized
-	#redirect_to "/login"
       else
 	if params[:remember].to_i == 1 
 	  cookies.permanent[:id] = authorized_user.id
@@ -30,10 +29,9 @@ class TopController < ApplicationController
 	  session[:email] = authorized_user.email
 	end
 
-	verified = authorized_user.verified
 	flash[:notice] = "" 
 
-	redirect_to "/user"
+	redirect_to "/"
       end
     else
       flash[:notice] = "ユーザー名かパスワードに誤りがあります"
@@ -48,7 +46,7 @@ class TopController < ApplicationController
     cookies.delete :email
     reset_session
 
-    redirect_to '/login'
+    redirect_to '/admin/login'
   end
 
   def forgot_password

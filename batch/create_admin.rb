@@ -1,17 +1,17 @@
 data = [
   {
     :name	=> "btoa-admin",
-    :email	=> "f.ishihara@btoa-admin.com",
+    :email	=> "f.ishihara@btoa-company.com",
     :password	=> "btoa1006"
   },
   {
     :name	=> "btoa-info",
-    :email	=> "info@btoa-admin.com",
+    :email	=> "info@btoa-company.com",
     :password	=> "qwe"
   },
   {
     :name	=> "btoa-test",
-    :email	=> "s.karakama@btoa-admin.com",
+    :email	=> "s.karakama@btoa-company.com",
     :password	=> "qwe"
   }
 ]

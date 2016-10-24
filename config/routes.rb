@@ -6,8 +6,8 @@ Rails.application.routes.draw do
   get	'/admin/logout'		  => "top#logout"
 
   get	'/admin/company/:id'	  => 'company#index'
-  get	'/admin/reward'		  => 'admin#reward'
-  post	'/admin/reward'		  => 'admin#reward'
+  get	'/admin/rewards'	  => 'rewards#index'
+  post	'/admin/rewards'	  => 'rewards#index'
 
   # analytics or statistics
   get	'/admin/analytics/users'      => 'analytics#users'

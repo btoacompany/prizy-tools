@@ -1,7 +1,7 @@
 <div id="wrapper">
 <div id="contents">
   <% if flash[:notice] %><p class="c_align notice"><%= flash[:notice] %></p><% end %>
-  <%= form_tag( "/login/complete", method: "post", id: "login_form" ) do %>
+  <%= form_tag( "/admin/login/complete", method: "post", id: "login_form" ) do %>
   <h3 class="c_align">ユーザーログイン</h3><br>
   <div id="loginbox" class="center">
     <table class="center" border="0">

@@ -8,17 +8,7 @@
 </head>
 <body>
 
-<header>
-  <div class="header">
-  <ul>
-    <li><%= link_to "ユーザー一覧", "/admin/analytics/users"%></li>
-    <li><%= link_to "利用状況(概観)", "/admin/analytics/overall"%></li>
-    <li><%= link_to "利用状況(企業)", "/admin/analytics/company"%></li>
-    <li><%= link_to "利用状況(個人)", "/admin/analytics/user"%></li>
-    <div class="clearfix"></div>
-  </ul>
-  </div> 
-</header>
+<%= render "shared/header"%>
 <%= yield %>
 
 </body>

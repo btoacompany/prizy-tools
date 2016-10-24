@@ -37,7 +37,7 @@
   </tr class="third_line">
   <% @company_lists.each do | item | %>
     <tr class="item_<%= item[:id] %> company_<%= item.id %> reborn">
-      <td><%= link_to "#{item.name}", "/admin/#{item.id}" %></td>
+      <td><%= link_to "#{item.name}", "/admin/company/#{item.id}" %></td>
       <% @num_employees =  User.where(company_id: item.id).count %>
       <td><%= @num_employees %></td>
       <td><%= item[:create_time ].strftime("%Y-%m-%d") %></td>
@@ -158,8 +158,6 @@ window.onload = function () {
 
 }
 </script>
-
-
 
 </div>
 </div> <!-- contents -->

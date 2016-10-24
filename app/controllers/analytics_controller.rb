@@ -1,6 +1,7 @@
 require 'csv'
 
 class AnalyticsController < ApplicationController
+  before_filter :authenticate_user, :init_url
 
   before_action :time_definition, only:[:overall, :company, :each_user, :first_csv, :second_csv, :third_csv, :csv_header]
   before_action :company_lists, only:[:index, :users, :company, :each_user, :second_csv]
@@ -11,52 +12,6 @@ class AnalyticsController < ApplicationController
   before_action :overall, only:[:first_csv]
   #second_csv
 
-  def index
-    @company = Company.find(params[:id])
-    posts = Post.where(:company_id => @company.id, :delete_flag => 0).order("update_time desc")
-
-    limit = 5
-    page = params[:page] || 1
-    @total_items = posts.count
-    @total_pages = (@total_items/limit.to_f).ceil
-
-    if page.to_i <= 1
-      page = 1
-      offset = 0
-    else
-      offset = (page.to_i * limit) - limit
-    end
-    posts = posts.offset(offset).limit(limit)
-
-    @page_now = params[:page].to_i
-    if @page_now == 0
-      @page_now = 1
-    end
-    @previous_page = @page_now - 1
-    @next_page = @page_now + 1
-
-    @posts = []
-    data = {}
-
-    posts.each do |post|
-      comments = Comment.where(:post_id => post.id, :delete_flag => 0)
-      kudos = Kudos.where(:post_id => post.id, :delete_flag => 0)
-
-      data ={
-        id: post.id,
-        user_id: post.user_id,
-        user_name: post.user.name,
-        receiver_name: post.receiver.id,
-        user_img: post.user.img_src,
-        receiver_img: post.receiver.img_src,
-        points: post.points,
-        description: post.description,
-        comments: comments,
-        kudos: kudos,
-        }
-      @posts << data
-    end
-  end
 
   def users
     #nothing_inside
@@ -72,7 +27,7 @@ class AnalyticsController < ApplicationController
     @total_actions = @total_posts + @total_kudos + @total_comments
   end
 
-  def compamy
+  def company
     @company_kudos = 0
   end
 
@@ -201,12 +156,6 @@ class AnalyticsController < ApplicationController
     send_data(data, type: 'text/csv', filename: "report_#{Time.now.strftime('%Y%m%d%H%M%S')}.csv")
   end
 
-  def reward
-    @request_rewards = RequestReward.all
-  end
-
-
-
   def time_definition
     @weeks=[]
     @big_this_week = Date.today.beginning_of_week
@@ -235,8 +184,6 @@ class AnalyticsController < ApplicationController
       @last_week => @last_week_custom,
       @this_week => @this_week_custom
     }
-
-
   end
 
   def user

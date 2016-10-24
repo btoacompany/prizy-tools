@@ -41,14 +41,14 @@ protected
       @current_user = Admin.find(user_id)
       return true	
     else
-      redirect_to "/login"
+      redirect_to "/admin/login"
       return false
     end
   end
 
   def save_login_state
     if session[:id] || cookies[:id]
-      redirect_to(:controller => 'top', :action => 'index')
+      redirect_to(:controller => 'company', :action => 'index')
       return false
     else
       return true
