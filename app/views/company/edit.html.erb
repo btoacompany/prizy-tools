@@ -1,0 +1,42 @@
+<div id="wrapper">
+<div id="contents">
+  <div class="toolbox">
+  <%= form_tag( "/admin/company/edit/complete", method: "post", id: "login_form", multipart: true ) do %>
+    <input type="hidden" name="id" value="<%= @company.id %>"/>
+    <table class="tbl_tools">
+      <tr>
+	<td>会社名:</td>
+	<td><input type="text" name="name" value="<%= @company.name %>"/></td>
+      </tr>
+      <tr>
+	<td>Plan Type:</td>
+	<td>
+	  <label><input type="radio" name="plan" value="0" <% if @company.plan == 0 %> checked <% end %>/>Trial</label>
+	  <label><input type="radio" name="plan" value="1" <% if @company.plan == 1 %> checked <% end %>/>Basic</label>
+	  <label><input type="radio" name="plan" value="2" <% if @company.plan == 2 %> checked <% end %>/>Gold</label>
+	</td>
+      </tr>
+      <tr>
+	<td>Plan Start Date:</td>
+	<td><input type="text" id="datepicker" name="plan_start_date" value="<%= @company.plan_start_date %>"/></td>
+      </tr>
+      <tr>
+	<td>Default Points:</td>
+	<td><input type="number" name="points_default" value="<%= @company.points_default %>" style="width: 60px" required /></td>
+      </tr>
+      <tr>
+	<td>Default Bonus:</td>
+	<td><input type="number" name="bonus_default" value="<%= @company.bonus_default %>" style="width: 60px" required /></td>
+      </tr>
+    </table><br>
+    <p align="center"><input type="submit" value="Submit"/></p>
+  <% end %>  
+  </div>
+</div>
+</div>
+
+<script>
+$(function() {
+  $("#datepicker").datepicker({ dateFormat: 'yy-mm-dd'});
+});
+</script>

@@ -5,18 +5,11 @@
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+  <script src="http://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
 </head>
 <body>
 
-<header>
-  <div class="header">
-    <li><%= link_to "ユーザー一覧", "/admin/users"%></li>
-    <li><%= link_to "利用状況(概観)", "/admin/analytics/overall"%></li>
-    <li><%= link_to "利用状況(企業)", "/admin/analytics/company"%></li>
-    <li><%= link_to "利用状況(個人)", "/admin/analytics/user"%></li>
-    <div class="clearfix"></div>
-  </div> 
-</header>
+<%= render "shared/header"%>
 <%= yield %>
 
 </body>

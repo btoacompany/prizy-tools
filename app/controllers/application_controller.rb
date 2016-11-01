@@ -19,19 +19,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def validate_user
-    if @current_user.present?
-      unless @current_user.admin == 1
-	redirect_to "/"
-      end
-    end
-  end
-
   def current_user
     user_id = session[:id] || cookies[:id]
 
     if user_id 
-      @current_user||= User.find(user_id)
+      @current_user||= Admin.find(user_id)
     end
 
     if @current_user
@@ -46,17 +38,17 @@ protected
     user_id = session[:id] || cookies[:id]
     if user_id
       # set current user object to @current_user object variable
-      @current_user = User.find(user_id)
+      @current_user = Admin.find(user_id)
       return true	
     else
-      redirect_to "/login"
+      redirect_to "/admin/login"
       return false
     end
   end
 
   def save_login_state
     if session[:id] || cookies[:id]
-      redirect_to(:controller => 'top', :action => 'index')
+      redirect_to(:controller => 'company', :action => 'index')
       return false
     else
       return true

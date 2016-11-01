@@ -1,0 +1,24 @@
+<div class="header_tools">
+  <nav id="primary_nav_wrap">
+    <ul>
+      <% if session[:id] || cookies[:id] %>
+	<li><a href="#" class="mainmenu">Analytics</a>
+	  <ul>
+	    <li><%= link_to "ユーザー一覧", "/admin/analytics/users"%></li>
+	    <li><%= link_to "利用状況(概観)", "/admin/analytics/overall"%></li>
+	    <li><%= link_to "利用状況(企業)", "/admin/analytics/company"%></li>
+	    <li><%= link_to "利用状況(個人)", "/admin/analytics/user"%></li>
+	  </ul>
+	</li>
+	<li><a href="#" class="mainmenu">Tools</a>
+	  <ul>
+	    <li><%= link_to "Company", "/admin/company"%></li>
+	    <li><%= link_to "Rewards", "/admin/rewards"%></li>
+	  </ul>
+	</li>
+	<li><a href="/admin/logout" class="mainmenu">Logout</a></li>
+      <% end %>  
+    </ul>
+  </nav>
+</div>  
+<div class="clearfix"></div>

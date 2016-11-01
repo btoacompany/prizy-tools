@@ -16,16 +16,11 @@ class Company < ActiveRecord::Base
   
   def save_record(params)
     @password = params[:password]
-    self.name	      = params[:name]
-    self.owner	      = params[:owner]
-    self.email	      = params[:email]
-    self.address      = params[:address]
-    self.phone	      = params[:phone]
-    self.url	      = params[:url]
-    self.logo	      = params[:logo]
-    self.hashtags     = params[:hashtags]
-    self.plan	      = params[:plan]	  || 0
-    self.verified     = params[:verified] || 0
+    self.name		  = params[:name]
+    self.points_default	  = params[:points_default]
+    self.bonus_default	  = params[:bonus_default]
+    self.plan_start_date  = Date.strptime(params[:plan_start_date], "%Y-%m-%d")
+    self.plan		  = params[:plan]  || 0
     self.save
   end
   

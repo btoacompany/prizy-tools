@@ -1,0 +1,56 @@
+<div id="wrapper">
+<div id="contents">
+  <div class="toolbox">
+    <table class="tbl_tools" border="1">
+      <tr>
+	<th>ID</th>
+	<th>会社名</th>
+	<th>Email</th>
+	<th>Plan</th>
+	<th>Plan start date</th>
+	<th>人数</th>
+	<th>ポイント</th>
+	<th>ボーナス</th>
+	<th>残りボーナス</th>
+	<th>Action</th>
+      </tr>
+      <% @company.each do | c | %>
+	<tr class="item_<%= c[:id] %>">
+	  <td><%= c[:id] %></td>
+	  <td><a href="/admin/company/<%= c[:id] %>"><%= c[:name] %></a></td>
+	  <td><%= c[:email] %></td>
+	  <td>
+	    <% if c[:plan] == 0 %>
+	      Trial
+	    <% elsif c[:plan] == 1 %>
+	      Basic
+	    <% elsif c[:plan] == 3 %>
+	      Gold
+	    <% end %>
+	  </td>
+	  <td><%  %></td>
+	  <td><%=  User.where(delete_flag: 0, company_id: c[:id]).count %></td>
+	  <td><%= c[:points_default] %></td>
+	  <td><%= c[:bonus_default] %></td>
+	  <td><%= c[:bonus_points] %></td>
+	  <td>
+	    <a href="/admin/company/edit/<%= c[:id] %>">編集</a> | 
+	    <a href="/admin/company/delete" data-id="<%= c[:id] %>" class="delete_item">削除</a>
+	  </td>
+	</tr>
+      <% end %>
+    </table>
+  </div>
+</div>
+</div>
+<script>
+$('.delete_item').click(function() {
+  var _id = ($(this).attr('data-id')); //get attributes of clicked item
+
+  if (confirm("本当に削除しますか？")) {
+    $.post("/admin/company/delete", { 'id': _id }); //send post request
+    $(".item_" + _id).remove(); //remove item upon deletion
+  }
+  return false; //do nothing
+});
+</script>
