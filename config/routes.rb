@@ -5,7 +5,12 @@ Rails.application.routes.draw do
   post	'/admin/login/complete'   => "top#login_complete"
   get	'/admin/logout'		  => "top#logout"
 
-  get	'/admin/company/:id'	  => 'company#index'
+  get	'/admin/company'	  => 'company#index'
+  get	'/admin/company/:id'	  => 'company#posts'
+  get	'/admin/company/edit/:id' => 'company#edit'
+  post	'/admin/company/edit/complete' => 'company#edit_complete'
+  post	'/admin/company/delete'	  => 'company#delete'
+
   get	'/admin/rewards'	  => 'rewards#index'
   post	'/admin/rewards'	  => 'rewards#index'
 

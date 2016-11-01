@@ -1,88 +1,56 @@
 <div id="wrapper">
-<div id="contents" class="timeline">
-<div class="leftbox col-8">
-
-<h2><%= @company.name %>の利用状況</h2>
-<div class="pagination" style="float:right">
-  <% if @total_pages > 8 %>
-    <% unless @page_now == 1 %>
-      <a href="<%= "/admin/company/#{@company.id}/?page=1" %>">最初</a>
-      <a href="<%= "/admin/company/#{@company.id}/?page=#{@previous_page}" %>">前へ</a>
-    <% end %>
-    <a href="<%= "/admin/company/#{@company.id}/?page=#{@page_now}" %>"><%= @page_now %></a>
-    <% unless @page_now == @total_pages %>
-      <a href="<%= "/admin/company/#{@company.id}/?page=#{@next_page}" %>">次へ</a>
-      <a href="<%= "/admin/company/#{@company.id}/?page=#{@total_pages}" %>">最後</a>
-    <% end %>
-  <% else %>
-    <% (1..@total_pages).each do | i | %>
-      <a href="<%= "/admin/company/#{@company.id}/?page=#{i}" %>"><%= i %></a>
-    <% end %>
-  <% end %>
-</div><br>
-<div class="clearfix"></div>
-
-<% @posts.each do | post | %>
-  <div id="postsbox">
-    <div class="images">
-      <table>
-        <tr>
-          <td><img src="<%= post[:user_img] %>" class=""/></td>
-          <td><img src="<%= post[:receiver_img] %>" class=""/></td>
-        </tr>
-      </table>
-    </div>
-    
-    <div class="posts">
-      From <span class="user giver"><b>@<%= post[:user_name] %></b></span><br> 
-      To <span class="user receiver"><b>@<%= post[:receiver_name] %>: </b></span>
-      <span class="points radius5"><%= post[:points] %> pts</span><br>
-      <span class="description"><%= raw post[:description].gsub(/\+[^\s|　]+/,"").gsub(/\#[^\s|　]+/,"<b style='color:#0080ff'>\\0</b>") %></span><br>
-    </div>
-    <hr>
-    
-    <div class="kudos">
-      <a data-id="<%= post[:id] %>" class="a_btn btn_like"><img src="https://s3-ap-northeast-1.amazonaws.com/btoa-img/common/btn_iine_off.png"/></a>
-      <span class="kudos_count"><%= post[:kudos].count %>件</span>
-      <div class="tooltip">
-        <a class="a_btn user_kudos">
-        <% if post[:kudos].present? %>
-          <% post[:kudos].each_with_index do | kudo, i | %>
-            <%= kudo.user.name %>
-            <% unless i == post[:kudos].count-1 %>,<% end %>
-            <% if i > 3 %><% break %><% end %>
-          <% end %>...
-        <% end %>
-        </a>
-        <span class="tooltiptext">
-        <% post[:kudos].each do | kudo | %>
-          <%= kudo.user.name %><br>
-        <% end %>
-        </span>
-      </div>
-    </div>
-  
-    <div class="comments">
-      <div class="comment_entry_<%= post[:id] %>">
-        <% post[:comments].each do | comment | %>
-          <div class="comment_entry">
-            <div class="user_comment_img">
-              <img src="<%= comment.user.img_src %>" width="25px" height="25px" class="radius20" />
-            </div>
-            <div class="user_comments">
-              <span class="user" style="font-weight:normal;">@<%= comment.user.name %></span>
-              <span class="comment"><%= comment.comments %></span>
-            </div>
-          </div> <br> 
-        <% end %>
-      </div>
-      <input type="text" name="comment" data-id="<%= post[:id] %>" class="give_comments
-    post_comment_<%= post[:id] %>"
-    value="" placeholder="コメントする" autocomplete="off"/>
-      <input type="button" class="btn_comment" data-id="<%= post[:id] %>" value="送信"/>
-    </div>
-  </div><br>
-<% end %>
+<div id="contents">
+  <div class="toolbox">
+    <table class="tbl_tools" border="1">
+      <tr>
+	<th>ID</th>
+	<th>会社名</th>
+	<th>Email</th>
+	<th>Plan</th>
+	<th>Plan start date</th>
+	<th>人数</th>
+	<th>ポイント</th>
+	<th>ボーナス</th>
+	<th>残りボーナス</th>
+	<th>Action</th>
+      </tr>
+      <% @company.each do | c | %>
+	<tr class="item_<%= c[:id] %>">
+	  <td><%= c[:id] %></td>
+	  <td><a href="/admin/company/<%= c[:id] %>"><%= c[:name] %></a></td>
+	  <td><%= c[:email] %></td>
+	  <td>
+	    <% if c[:plan] == 0 %>
+	      Trial
+	    <% elsif c[:plan] == 1 %>
+	      Basic
+	    <% elsif c[:plan] == 3 %>
+	      Gold
+	    <% end %>
+	  </td>
+	  <td><%  %></td>
+	  <td><%=  User.where(delete_flag: 0, company_id: c[:id]).count %></td>
+	  <td><%= c[:points_default] %></td>
+	  <td><%= c[:bonus_default] %></td>
+	  <td><%= c[:bonus_points] %></td>
+	  <td>
+	    <a href="/admin/company/edit/<%= c[:id] %>">編集</a> | 
+	    <a href="/admin/company/delete" data-id="<%= c[:id] %>" class="delete_item">削除</a>
+	  </td>
+	</tr>
+      <% end %>
+    </table>
+  </div>
 </div>
-</div> <!-- contents -->
-</div> <!-- wrapper -->
+</div>
+<script>
+$('.delete_item').click(function() {
+  var _id = ($(this).attr('data-id')); //get attributes of clicked item
+
+  if (confirm("本当に削除しますか？")) {
+    $.post("/admin/company/delete", { 'id': _id }); //send post request
+    $(".item_" + _id).remove(); //remove item upon deletion
+  }
+  return false; //do nothing
+});
+</script>

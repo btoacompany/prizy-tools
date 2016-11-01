@@ -1,6 +1,27 @@
 class CompanyController < ApplicationController
   before_filter :authenticate_user, :init_url
+
   def index
+    @company = Company.where(delete_flag: 0)
+  end
+
+  def edit
+    @company = Company.find(params[:id])
+  end
+
+  def edit_complete
+    company = Company.find(params[:id])
+    company.save_record(params)
+    redirect_to_index 
+  end
+
+  def delete
+    company = Company.find(params[:id])
+    company.delete_record
+    redirect_to_index
+  end
+
+  def posts 
     @company = Company.find(params[:id])
     posts = Post.where(:company_id => @company.id, :delete_flag => 0).order("update_time desc")
 
@@ -42,8 +63,12 @@ class CompanyController < ApplicationController
         description: post.description,
         comments: comments,
         kudos: kudos,
-        }
+      }
       @posts << data
     end
+  end
+
+  def redirect_to_index
+    redirect_to "/admin/company" 
   end
 end
