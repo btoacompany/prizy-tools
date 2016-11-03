@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session,
     if: Proc.new { |c| c.request.format =~ %r{application/json} }
   helper_method :current_user
+  before_filter :init_url
 
   def init_url
     if Rails.env.production?
