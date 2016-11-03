@@ -1,8 +1,6 @@
 require 'ostruct'
 
 class ApplicationController < ActionController::Base
-  force_ssl if Rails.env.production?
-
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :null_session,
@@ -11,10 +9,12 @@ class ApplicationController < ActionController::Base
 
   def init_url
     if Rails.env.production?
-      @prizy_url = "http://prizy.me"
+      @protocol = "https://"
+      @prizy_url = "https://tools.prizy.me"
       @s3_url = "https://s3-ap-northeast-1.amazonaws.com/prizy"
       @s3_bucket = "prizy"
     elsif Rails.env.development?
+      @protocol = "http://"
       @prizy_url = "http://localhost:3000"
       @s3_url = "https://s3-ap-northeast-1.amazonaws.com/btoa-img"
       @s3_bucket = "btoa-img"
@@ -35,6 +35,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def redirect_page(controller, action)
+    redirect_to :protocol => @protocol, :controller => controller, :action => action
+  end
+
 protected 
   def authenticate_user
     user_id = session[:id] || cookies[:id]
@@ -43,14 +47,14 @@ protected
       @current_user = Admin.find(user_id)
       return true	
     else
-      redirect_to "/admin/login"
+      redirect_page("top", "login") 
       return false
     end
   end
 
   def save_login_state
     if session[:id] || cookies[:id]
-      redirect_to(:controller => 'company', :action => 'index')
+      redirect_page("company", "index") 
       return false
     else
       return true
