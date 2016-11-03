@@ -1,7 +1,6 @@
 require 'csv'
 
 class AnalyticsController < ApplicationController
-  force_ssl if Rails.env.production?
   before_filter :authenticate_user, :init_url
 
   before_action :time_definition, only:[:overall, :company, :each_user, :first_csv, :second_csv, :third_csv, :csv_header]
