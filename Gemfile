@@ -62,6 +62,3 @@ gem 'sucker_punch'
 #gem 'paperclip'
 #gem 'rails_12factor', group: :production
 #gem 'pg'
-#gem 'ssl_requirement'
-#gem 'grosser-ssl_requirement', :require => 'ssl_requirement'
-gem 'bartt-ssl_requirement', '~>1.4.0', require: 'ssl_requirement'
