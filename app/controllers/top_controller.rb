@@ -6,7 +6,7 @@ class TopController < ApplicationController
 
   def login
     if session[:id] || cookies[:id]
-      redirect_to "/"
+      redirect_to_index
     end
     reset_session
   end
@@ -31,7 +31,7 @@ class TopController < ApplicationController
 
 	flash[:notice] = "" 
 
-	redirect_to "/"
+	redirect_to_index
       end
     else
       flash[:notice] = "ユーザー名かパスワードに誤りがあります"
@@ -46,7 +46,7 @@ class TopController < ApplicationController
     cookies.delete :email
     reset_session
 
-    redirect_to '/admin/login'
+    redirect_page("top", "login") 
   end
 
   def forgot_password
@@ -71,5 +71,9 @@ class TopController < ApplicationController
       flash[:notice] = "The email you entered does not exist"
       render 'forgot_password'
     end
+  end
+
+  def redirect_to_index
+    redirect_page("analytics", "company")
   end
 end
