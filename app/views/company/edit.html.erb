@@ -18,7 +18,7 @@
       </tr>
       <tr>
 	<td>Plan Start Date:</td>
-	<td><input type="text" id="datepicker" name="plan_start_date" value="<%= @company.plan_start_date %>"/></td>
+	<td><input type="text" id="datepicker" name="plan_start_date" value="<%= @company.plan_start_date.strftime("%Y-%m-%d") if @company.plan_start_date.present?%>"/></td>
       </tr>
       <tr>
 	<td>Default Points:</td>
