@@ -69,6 +69,6 @@ class CompanyController < ApplicationController
   end
 
   def redirect_to_index
-    redirect_to "/admin/company" 
+    redirect_page("company", "index")
   end
 end

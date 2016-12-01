@@ -187,11 +187,11 @@ class AnalyticsController < ApplicationController
   end
 
   def user
-    @users = User.all
+    @users = User.where(:delete_flag => 0)
   end
 
   def company_lists
-    @company_lists = Company.all
+    @company_lists = Company.where(:delete_flag => 0)
   end
 
   def csv_header

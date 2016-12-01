@@ -16,10 +16,13 @@ class Company < ActiveRecord::Base
   
   def save_record(params)
     @password = params[:password]
+    if (params[:plan_start_date].present?)
+      self.plan_start_date  = Date.strptime(params[:plan_start_date], "%Y-%m-%d")
+    end
+
     self.name		  = params[:name]
     self.points_default	  = params[:points_default]
     self.bonus_default	  = params[:bonus_default]
-    self.plan_start_date  = Date.strptime(params[:plan_start_date], "%Y-%m-%d")
     self.plan		  = params[:plan]  || 0
     self.save
   end
