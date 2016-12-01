@@ -7,7 +7,7 @@
 	<th>会社名</th>
 	<th>Email</th>
 	<th>Plan</th>
-	<th>Plan start date</th>
+	<th>Plan start date<br>/ time created</th>
 	<th>人数</th>
 	<th>ポイント</th>
 	<th>ボーナス</th>
@@ -24,11 +24,15 @@
 	      Trial
 	    <% elsif c[:plan] == 1 %>
 	      Basic
-	    <% elsif c[:plan] == 3 %>
+	    <% elsif c[:plan] == 2 %>
 	      Gold
 	    <% end %>
 	  </td>
-	  <td><%= c[:plan_start_date].strftime("%Y-%m-%d") if c[:plan_start_date].present? %></td>
+	  <% if c[:plan_start_date].present? %>
+	    <td><%= c[:plan_start_date].strftime("%Y-%m-%d") %></td>
+	  <% else %>
+	    <td><%#= c[:create_time].strftime("%Y-%m-%d") %></td>
+	  <% end %>
 	  <td><%=  User.where(delete_flag: 0, company_id: c[:id]).count %></td>
 	  <td><%= c[:points_default] %></td>
 	  <td><%= c[:bonus_default] %></td>
