@@ -32,6 +32,6 @@ class RewardsPrizyController < ApplicationController
   end
 
   def redirect_to_index
-    redirect_to '/admin/rewards_prizy'
+    redirect_page("rewards_prizy", "index")
   end
 end
