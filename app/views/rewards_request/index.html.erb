@@ -1,54 +1,91 @@
 <div id="wrapper">
 <div id="contents">
 <div class="toolbox">
-  <%= form_tag({:controller => 'rewards_request', :action => 'index'}, remote: true) do%>
-    <select name="btoa_action">
-      <option value="btoa">BtoAアクション</option>
-    </select>
-    <input type="submit" value="送信">
-  <% end %>
 
-  <table class="tbl_tools first_table" border="1">
-  <tr>
-    <th>会社名</th>
-    <th>ユーザー名</th>
-    <th>メールアドレス</th>
-    <th>Reward_Request</th>
-    <th>申請日</th>
-    <th>ステータス</th>
-    <th>承認日</th>
-    <th>BtoA Action</th>
-  </tr>
-  <% @request_rewards.each do |request| %>
-  <% if request.status == 1 && request.reward.img_src == "https://s3-ap-northeast-1.amazonaws.com/btoa-img/common/img_07.png" %>
+<%= form_tag({:controller => 'rewards_request', :action => 'index'}, remote: true) do%>
+  <select name="btoa_action">
+    <option value="btoa">BtoAアクション</option>
+  </select>
+  <input type="submit" value="送信">
+<% end %>
+
+<table class="tbl_tools first_table" border="1">
+<tr>
+  <th>会社名</th>
+  <th>ユーザー名</th>
+  <th>メールアドレス</th>
+  <th>Reward_Request</th>
+  <th>申請日</th>
+  <th>ステータス</th>
+  <th>承認日</th>
+  <th>BtoA Action</th>
+</tr>
+
+<% @request_rewards.each do |request| %>
+  <% if request.reward_id? && request.reward_id != 0 %>
+    <% if request.status == 1 && request.reward.img_src == "https://s3-ap-northeast-1.amazonaws.com/btoa-img/common/img_07.png" %>
       <tr class="reward_default reward_picked">
     <% elsif request.status == 1 && request.reward.img_src == "https://s3-ap-northeast-1.amazonaws.com/btoa-img/common/img_05.png" %>
       <tr class="reward_default reward_picked">
     <% else %>
       <tr class="reward_default">
     <% end %>
-    <td><%= request.company.name %></td>
-    <td><%= request.user.lastname %><%= request.user.firstname %></td>
-    <td><%= request.user.email %></td>
-    <td><%= request.reward.title %></td>
-    <td><%= request.create_time.strftime("%Y-%m-%d") %></td>
-    <% if request.status == 0 %>
-      <td>申請中</td>
-    <% elsif request.status == 1%>
-      <td>承認済</td>
+
+	<td><%= request.company.name %></td>
+	<td><%= request.user.lastname %><%= request.user.firstname %></td>
+	<td><%= request.user.email %></td>
+	<td><%= request.reward.title %></td>
+	<td><%= request.create_time.strftime("%Y-%m-%d") %></td>
+
+	<% if request.status == 0 %> <td>申請中</td>
+	<% elsif request.status == 1%> <td>承認済</td>
+	<% else %> <td>非承認</td>
+	<% end %>
+
+	<td><%= request.update_time.strftime("%Y-%m-%d") %></td>
+	
+	<% if request.status == 1 && request.reward.img_src == "https://s3-ap-northeast-1.amazonaws.com/btoa-img/common/img_07.png" %>
+	  <td>◯</td>
+	<% elsif request.status == 1 && request.reward.img_src == "https://s3-ap-northeast-1.amazonaws.com/btoa-img/common/img_05.png" %>
+	  <td>◯</td>
+	<% else %>
+	  <td>×</td>
+	<% end %>
+      </tr>
+
+  <% elsif request.rewards_prizy_id? && request.rewards_prizy_id != 0 %>
+    
+    <% if request.status == 1 && request.rewards_prizy.img_src == "https://s3-ap-northeast-1.amazonaws.com/btoa-img/common/img_07.png" %>
+      <tr class="reward_default reward_picked">
+    <% elsif request.status == 1 && request.rewards_prizy.img_src == "https://s3-ap-northeast-1.amazonaws.com/btoa-img/common/img_05.png" %>
+      <tr class="reward_default reward_picked">
     <% else %>
-      <td>非承認</td>
+      <tr class="reward_default">
     <% end %>
-    <td><%= request.update_time.strftime("%Y-%m-%d") %></td>
-    <% if request.status == 1 && request.reward.img_src == "https://s3-ap-northeast-1.amazonaws.com/btoa-img/common/img_07.png" %>
-      <td>◯</td>
-    <% elsif request.status == 1 && request.reward.img_src == "https://s3-ap-northeast-1.amazonaws.com/btoa-img/common/img_05.png" %>
-      <td>◯</td>
-    <% else %>
-      <td>×</td>
+	<td><%= request.company.name %></td>
+	<td><%= request.user.lastname %><%= request.user.firstname %></td>
+	<td><%= request.user.email %></td>
+	<td><%= request.rewards_prizy.title %></td>
+	<td><%= request.create_time.strftime("%Y-%m-%d") %></td>
+
+	<% if request.status == 0 %> <td>申請中</td>
+	<% elsif request.status == 1%> <td>承認済</td>
+	<% else %> <td>非承認</td>
+	<% end %>
+
+	<td><%= request.update_time.strftime("%Y-%m-%d") %></td>
+	
+	<% if request.status == 1 && request.rewards_prizy.img_src == "https://s3-ap-northeast-1.amazonaws.com/btoa-img/common/img_07.png" %>
+	  <td>◯</td>
+	<% elsif request.status == 1 && request.rewards_prizy.img_src == "https://s3-ap-northeast-1.amazonaws.com/btoa-img/common/img_05.png" %>
+	  <td>◯</td>
+	<% else %>
+	  <td>×</td>
+	<% end %>
+      </tr>
     <% end %>
-  </tr>
   <% end %>
+
   </table><br>
 
 </div>

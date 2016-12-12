@@ -6,6 +6,8 @@ class RewardsPrizy < ActiveRecord::Base
   before_create :set_create_time
   before_update :set_update_time
 
+  belongs_to :company
+
   def save_record(params)
     self.title		= params[:title]
     self.img_src	= params[:img_src]

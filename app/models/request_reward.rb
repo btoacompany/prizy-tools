@@ -6,6 +6,7 @@ class RequestReward < ActiveRecord::Base
   belongs_to :company
   belongs_to :user, :class_name => 'User'
   belongs_to :reward, :class_name => 'Reward'
+  belongs_to :rewards_prizy, :class_name => 'RewardsPrizy'
 
   before_create :set_create_time
   before_update :set_update_time
